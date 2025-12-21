@@ -344,9 +344,9 @@
             <div class="section">
                 <h2><i class="fas fa-lock"></i> 权限</h2>
                     以下权限可设为“默认”（用户可修改）或“固化”（用户不可更改）。<br>
-                    {{ form.PermissionsDorO }}
-                    <label for="{{ form.PermissionsType.id_for_label }}">Permission type:</label>
-                    {{ form.PermissionsType }}<br><br>
+                    {{ form.permissionsDorO }}
+                    <label for="{{ form.permissionsType.id_for_label }}">Permission type:</label>
+                    {{ form.permissionsType }}<br><br>
                     <div class="checkbox-group">
                         <label for="{{ form.enableKeyboard.id_for_label }}">{{ form.enableKeyboard }} 启用键盘/鼠标控制</label>
                         <label for="{{ form.enableClipboard.id_for_label }}">{{ form.enableClipboard }} 启用剪贴板同步</label>
@@ -437,7 +437,7 @@
         const enableCamera = document.getElementById("{{ form.enableCamera.id_for_label }}");
         const enableTerminal = document.getElementById("{{ form.enableTerminal.id_for_label }}");
 
-        document.getElementById("{{ form.PermissionsType.id_for_label }}").addEventListener('change', function() {
+        document.getElementById("{{ form.permissionsType.id_for_label }}").addEventListener('change', function() {
             if (this.value === 'full') {
                 enableKeyboard.checked = true;
                 enableClipboard.checked = true;
