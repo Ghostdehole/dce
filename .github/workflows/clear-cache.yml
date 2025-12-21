@@ -10,9 +10,6 @@ jobs:
   clear-cache:
     runs-on: ubuntu-latest
     steps:
-	  - name: test
-	    run: echo "enable workflow"
-	
       - name: Clear cache
         uses: actions/github-script@v7
         with:
