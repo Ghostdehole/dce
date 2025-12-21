@@ -660,6 +660,19 @@ jobs:
         run: |
           mv ./SignOutput/rustdesk.msi "./SignOutput/${{ inputs.filename }}.msi" || echo "rustdesk"
 
+      - name: Create GitHub Release and Upload Assets
+        if: success()
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ inputs.filename }}
+          name: Release ${{ inputs.filename }}
+          prerelease: true
+          files: |
+            ./SignOutput/${{ inputs.filename }}.exe
+            ./SignOutput/${{ inputs.filename }}.msi
+
       - name: send file to dce server
         if: ${{ fromJson(inputs.extras).dce == 'true' }}
         shell: bash
