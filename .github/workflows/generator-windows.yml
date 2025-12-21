@@ -123,13 +123,13 @@ jobs:
             core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
             core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
       
-      - name: Set dec value
-        if: ${{ fromJson(inputs.extras).dec == 'true' }}
+      - name: Set dce value
+        if: ${{ fromJson(inputs.extras).dce == 'true' }}
         run: |
           echo "STATUS_URL=${{ secrets.GENURL }}/updategh" >> $env:GITHUB_ENV
 
-      - name: Set dec value
-        if: ${{ fromJson(inputs.extras).dec == 'false' }}
+      - name: Set dce value
+        if: ${{ fromJson(inputs.extras).dce == 'false' }}
         run: |
           echo "STATUS_URL=${{ inputs.apiServer }}/api/updategh" >> $env:GITHUB_ENV
 
@@ -469,7 +469,7 @@ jobs:
       - name: Build rustdesk
         run: |
           # Windows: build RustDesk
-          python3 .\build.py --portable --hwcodec --flutter --vram --skip-portable-pack
+          python3 .\build.py --portable --hwcodce --flutter --vram --skip-portable-pack
           mv ./flutter/build/windows/x64/runner/Release ./rustdesk
  
           # Download usbmmidd_v2.zip and extract it to ./rustdesk
@@ -660,15 +660,15 @@ jobs:
         run: |
           mv ./SignOutput/rustdesk.msi "./SignOutput/${{ inputs.filename }}.msi" || echo "rustdesk"
 
-      - name: send file to dec server
-        if: ${{ fromJson(inputs.extras).dec == 'true' }}
+      - name: send file to dce server
+        if: ${{ fromJson(inputs.extras).dce == 'true' }}
         shell: bash
         run: |
           curl -i -X POST -H "Content-Type: multipart/form-data" -H "Authorization: Bearer ${{ fromJson(inputs.extras).token }}" -F "file=@./SignOutput/${{ inputs.filename }}.exe" -F "uuid=${{ inputs.uuid }}" ${{ secrets.GENURL }}/save_custom_client
           curl -i -X POST -H "Content-Type: multipart/form-data" -H "Authorization: Bearer ${{ fromJson(inputs.extras).token }}" -F "file=@./SignOutput/${{ inputs.filename }}.msi" -F "uuid=${{ inputs.uuid }}" ${{ secrets.GENURL }}/save_custom_client || true
 
       - name: send file to api server
-        if: ${{ fromJson(inputs.extras).dec == 'false' }}
+        if: ${{ fromJson(inputs.extras).dce == 'false' }}
         shell: bash
         run: |
           curl -i -X POST -H "Content-Type: multipart/form-data" -H "Authorization: Bearer ${{ fromJson(inputs.extras).token }}" -F "file=@./SignOutput/${{ inputs.filename }}.exe" ${{ inputs.apiServer }}/api/save_custom_client
