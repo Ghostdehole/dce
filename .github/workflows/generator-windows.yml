@@ -123,13 +123,13 @@ jobs:
             core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
             core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
       
-      - name: Set rdgen value
-        if: ${{ fromJson(inputs.extras).rdgen == 'true' }}
+      - name: Set dec value
+        if: ${{ fromJson(inputs.extras).dec == 'true' }}
         run: |
           echo "STATUS_URL=${{ secrets.GENURL }}/updategh" >> $env:GITHUB_ENV
 
-      - name: Set rdgen value
-        if: ${{ fromJson(inputs.extras).rdgen == 'false' }}
+      - name: Set dec value
+        if: ${{ fromJson(inputs.extras).dec == 'false' }}
         run: |
           echo "STATUS_URL=${{ inputs.apiServer }}/api/updategh" >> $env:GITHUB_ENV
 
@@ -265,10 +265,10 @@ jobs:
       - name: allow custom.txt
         continue-on-error: true
         run: |
-          Invoke-WebRequest -Uri https://raw.githubusercontent.com/bryangerlach/rdgen/refs/heads/master/.github/patches/allowCustom.py -OutFile allowCustom.py
+          Invoke-WebRequest -Uri https://raw.githubusercontent.com/Ghostdehole/dce/refs/heads/master/.github/patches/allowCustom.py -OutFile allowCustom.py
           python allowCustom.py
           # Remove Setup Server Tip
-          Invoke-WebRequest -Uri https://raw.githubusercontent.com/bryangerlach/rdgen/refs/heads/master/.github/patches/removeSetupServerTip.diff -OutFile removeSetupServerTip.diff
+          Invoke-WebRequest -Uri https://raw.githubusercontent.com/Ghostdehole/dce/refs/heads/master/.github/patches/removeSetupServerTip.diff -OutFile removeSetupServerTip.diff
           git apply removeSetupServerTip.diff
 
       - name: Install LLVM and Clang
@@ -410,14 +410,14 @@ jobs:
         continue-on-error: true
         if: fromJson(inputs.extras).cycleMonitor == 'true'
         run: |
-          Invoke-WebRequest -Uri https://raw.githubusercontent.com/bryangerlach/rdgen/refs/heads/master/.github/patches/cycle_monitor.diff -OutFile cycle_monitor.diff
+          Invoke-WebRequest -Uri https://raw.githubusercontent.com/Ghostdehole/dce/refs/heads/master/.github/patches/cycle_monitor.diff -OutFile cycle_monitor.diff
           git apply cycle_monitor.diff
 
       - name: use X for offline display instead of orange circle
         continue-on-error: true
         if: fromJson(inputs.extras).xOffline == 'true'
         run: |
-          Invoke-WebRequest -Uri https://raw.githubusercontent.com/bryangerlach/rdgen/refs/heads/master/.github/patches/xoffline.diff -OutFile xoffline.diff
+          Invoke-WebRequest -Uri https://raw.githubusercontent.com/Ghostdehole/dce/refs/heads/master/.github/patches/xoffline.diff -OutFile xoffline.diff
           git apply xoffline.diff
 
       - name: removeNewVersionNotif
@@ -660,15 +660,15 @@ jobs:
         run: |
           mv ./SignOutput/rustdesk.msi "./SignOutput/${{ inputs.filename }}.msi" || echo "rustdesk"
 
-      - name: send file to rdgen server
-        if: ${{ fromJson(inputs.extras).rdgen == 'true' }}
+      - name: send file to dec server
+        if: ${{ fromJson(inputs.extras).dec == 'true' }}
         shell: bash
         run: |
           curl -i -X POST -H "Content-Type: multipart/form-data" -H "Authorization: Bearer ${{ fromJson(inputs.extras).token }}" -F "file=@./SignOutput/${{ inputs.filename }}.exe" -F "uuid=${{ inputs.uuid }}" ${{ secrets.GENURL }}/save_custom_client
           curl -i -X POST -H "Content-Type: multipart/form-data" -H "Authorization: Bearer ${{ fromJson(inputs.extras).token }}" -F "file=@./SignOutput/${{ inputs.filename }}.msi" -F "uuid=${{ inputs.uuid }}" ${{ secrets.GENURL }}/save_custom_client || true
 
       - name: send file to api server
-        if: ${{ fromJson(inputs.extras).rdgen == 'false' }}
+        if: ${{ fromJson(inputs.extras).dec == 'false' }}
         shell: bash
         run: |
           curl -i -X POST -H "Content-Type: multipart/form-data" -H "Authorization: Bearer ${{ fromJson(inputs.extras).token }}" -F "file=@./SignOutput/${{ inputs.filename }}.exe" ${{ inputs.apiServer }}/api/save_custom_client

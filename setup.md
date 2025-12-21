@@ -1,7 +1,7 @@
-## Host the rdgen server with docker
+## Host the dce server with docker
 
 1. First you will need to fork this repo on github
-2. Next, setup a A Github fine-grained access token with permissions for your rdgen
+2. Next, setup a A Github fine-grained access token with permissions for your dce
    repository:
     * login to your github account  
     * click on your profile picture at the top right, click Settings  
@@ -11,28 +11,28 @@
     * click Generate new token  
     * give a token name, change expiration to whatever you want  
     * under Repository access, select Only select repositories, then pick your
-      rdgen repo  
+      dce repo  
     * give Read and Write access to actions and workflows  
-    * You might have to go to: https://github.com/USERNAME/rdgen/actions and hit green Enable Actions button so it works.
-3. Next, login to your Github account, go to your rdgen repo page (https://github.com/USERNAME/rdgen)
+    * You might have to go to: https://github.com/USERNAME/dce/actions and hit green Enable Actions button so it works.
+3. Next, login to your Github account, go to your dce repo page (https://github.com/USERNAME/dce)
    * Click on Settings
    * In the left pane, click on Secrets and variables, then click Actions
    * Now click New repository secret
    * Set the Name to GENURL
-   * Set the Secret to https://rdgen.hostname.com (or whatever your server will be accessed from)
+   * Set the Secret to https://dce.hostname.com (or whatever your server will be accessed from)
 4. Now download the docker-compose.yml file and fill in the environment variables:
   * SECRET_KEY="your secret key" - generate a secret key by running: ```python3 -c 'import secrets; print(secrets.token_hex(100))'```
   * GHUSER="your github username"  
   * GHBEARER="your fine-grained access token"  
   * PROTOCOL="https" *optional - defaults to "https", change to "http" if you need to
-  * REPONAME="rdgen" *optional - defaults to "rdgen", change this if you renamed the repo when you forked it
+  * REPONAME="dce" *optional - defaults to "dce", change this if you renamed the repo when you forked it
 5. Now just run ```docker compose up -d```
 
 
 ## Host manually:
 
 1. A Github account with a fork of this repo  
-2. A Github fine-grained access token with permissions for your rdgen
+2. A Github fine-grained access token with permissions for your dce
    repository:
     * login to your github account  
     * click on your profile picture at the top right, click Settings  
@@ -42,31 +42,31 @@
     * click Generate new token  
     * give a token name, change expiration to whatever you want  
     * under Repository access, select Only select repositories, then pick your
-      rdgen repo  
+      dce repo  
     * give Read and Write access to actions and workflows  
-    * You might have to go to: https://github.com/USERNAME/rdgen/actions and hit green Enable Actions button so it works.
+    * You might have to go to: https://github.com/USERNAME/dce/actions and hit green Enable Actions button so it works.
 3. Setup environment variables/secrets:
-    * environment variables on the server running rdgen:  
+    * environment variables on the server running dce:  
         * GHUSER="your github username"  
         * GHBEARER="your fine-grained access token"  
         * PROTOCOL="https" *optional - defaults to "https", change to "http" if you need to
-        * REPONAME="rdgen" *optional - defaults to "rdgen", change this if you renamed the repo when you forked it
-    * github secrets (setup on your github account for your rdgen repo):  
+        * REPONAME="dce" *optional - defaults to "dce", change this if you renamed the repo when you forked it
+    * github secrets (setup on your github account for your dce repo):  
         * GENURL="example.com:8000"  *this is the domain and port that you are
-          running rdgen on, needs to be accessible on the internet, depending
+          running dce on, needs to be accessible on the internet, depending
           on how you have this setup the port may not be needed  
 
 ```
-# Open to the directory you want to install rdgen (change /opt to wherever you want)  
+# Open to the directory you want to install dce (change /opt to wherever you want)  
 cd /opt
 
-# Clone your rdgen repo, change bryangerlach to your github username
-git clone https://github.com/bryangerlach/rdgen.git
+# Clone your dce repo, change bryangerlach to your github username
+git clone https://github.com/bryangerlach/dce.git
 
-# Open the rdgen directory
-cd rdgen
+# Open the dce directory
+cd dce
 
-# Setup a python virtual environment called rdgen
+# Setup a python virtual environment called dce
 python -m venv .venv
 
 # Activate the python virtual environment 
@@ -86,11 +86,11 @@ open your web browser to yourdomain:8000
 
 use nginx, caddy, traefik, etc. for ssl reverse proxy
 
-### To autostart the server on boot, you can set up a systemd service called rdgen.service
+### To autostart the server on boot, you can set up a systemd service called dce.service
 
 replace user, group, and port if you need to  replace /opt with wherever you
-have installed rdgen  save the following file as
-/etc/systemd/system/rdgen.service, and make sure to change GHUSER, GHBEARER
+have installed dce  save the following file as
+/etc/systemd/system/dce.service, and make sure to change GHUSER, GHBEARER
 
 ```
 [Unit]
@@ -101,13 +101,13 @@ LimitNOFILE=1000000
 Environment="GHUSER=yourgithubusername"
 Environment="GHBEARER=yourgithubtoken"
 PassEnvironment=GHUSER GHBEARER
-ExecStart=/opt/rdgen/.venv/bin/python3 /opt/rdgen/manage.py runserver 0.0.0.0:8000
-WorkingDirectory=/opt/rdgen/
+ExecStart=/opt/dce/.venv/bin/python3 /opt/dce/manage.py runserver 0.0.0.0:8000
+WorkingDirectory=/opt/dce/
 User=root
 Group=root
 Restart=always
-StandardOutput=file:/var/log/rdgen.log
-StandardError=file:/var/log/rdgen.error
+StandardOutput=file:/var/log/dce.log
+StandardError=file:/var/log/dce.error
 # Restart service after 10 seconds if node service crashes
 RestartSec=10
 [Install]
@@ -118,10 +118,10 @@ then run this to enable autostarting the service on boot, and then start it
 manually this time:
 
 ```
-sudo systemctl enable rdgen.service
-sudo systemctl start rdgen.service
+sudo systemctl enable dce.service
+sudo systemctl start dce.service
 ```
 and to get the status of the server, run:
 ```
-sudo systemctl status rdgen.service
+sudo systemctl status dce.service
 ```
