@@ -19,7 +19,7 @@
    * In the left pane, click on Secrets and variables, then click Actions
    * Now click New repository secret
    * Set the Name to GENURL
-   * Set the Secret to https://dce.hostname.com (or whatever your server will be accessed from)
+   * Set the Secret to the hostname or domain your server is accessed from
 4. Now download the docker-compose.yml file and fill in the environment variables:
   * SECRET_KEY="your secret key" - generate a secret key by running: ```python3 -c 'import secrets; print(secrets.token_hex(100))'```
   * GHUSER="your github username"  
@@ -60,8 +60,8 @@
 # Open to the directory you want to install dce (change /opt to wherever you want)  
 cd /opt
 
-# Clone your dce repo, change bryangerlach to your github username
-git clone https://github.com/bryangerlach/dce.git
+# Clone your dce repo, change Ghostdehole to your github username
+git clone https://github.com/Ghostdehole/dce.git
 
 # Open the dce directory
 cd dce
