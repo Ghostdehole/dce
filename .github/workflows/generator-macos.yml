@@ -734,15 +734,15 @@ jobs:
             "${{ secrets.GENURL }}/save_custom_client"
         
 
-      - name: send file to api server
-        if: ${{ fromJson(inputs.extras).dce == 'false' }}
-        shell: bash
-        run: |
-          curl -i -X POST \
-            -H "Content-Type: multipart/form-data" \
-            -H "Authorization: Bearer ${{ fromJson(inputs.extras).token }}" \
-            -F "file=@$GITHUB_WORKSPACE/${{ inputs.filename }}-${{ matrix.job.arch }}.dmg" \
-            "${{ inputs.apiServer }}/api/save_custom_client"
+     #- name: send file to api server
+     #  if: ${{ fromJson(inputs.extras).dce == 'false' }}
+     #  shell: bash
+     #  run: |
+     #    curl -i -X POST \
+     #      -H "Content-Type: multipart/form-data" \
+     #      -H "Authorization: Bearer ${{ fromJson(inputs.extras).token }}" \
+     #      -F "file=@$GITHUB_WORKSPACE/${{ inputs.filename }}-${{ matrix.job.arch }}.dmg" \
+     #      "${{ inputs.apiServer }}/api/save_custom_client"
 
       - name: Report Status
         uses: fjogeleit/http-request-action@v1
