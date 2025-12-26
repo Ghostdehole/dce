@@ -465,8 +465,8 @@ jobs:
         continue-on-error: true
         if: fromJson(inputs.extras).removeNewVersionNotif == 'true'
         run: | 
-          sed -i '' -e 's|updateUrl.isNotEmpty|false|' ./flutter/lib/desktop/pages/desktop_home_page.dart
-          sed -n '' -e '/let (request, url) =/,/Ok(())/ { /Ok(())/p }' ./src/common.rs > tmp.rs && mv tmp.rs ./src/common.rs
+          sed -i '' 's|updateUrl.isNotEmpty|false|' ./flutter/lib/desktop/pages/desktop_home_page.dart
+          sed -n '/let (request, url) =/,/Ok(())/ { /Ok(())/p }' ./src/common.rs > tmp.rs && mv tmp.rs ./src/common.rs
 
       - name: Report Status
         uses: fjogeleit/http-request-action@v1
