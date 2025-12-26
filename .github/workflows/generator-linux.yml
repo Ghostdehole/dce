@@ -395,8 +395,8 @@ jobs:
             --volume "/opt/artifacts:/opt/artifacts"
           shell: /bin/bash
           install: |
-			echo "Disabling Flatpak summary download"
-			flatpak remote-modify --no-summary flathub || true
+            echo "Disabling Flatpak summary download"
+            flatpak remote-modify --no-summary flathub || true
             apt-get update -y
             echo -e "installing deps"
             apt-get install -y \
